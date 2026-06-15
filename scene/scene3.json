@@ -1,0 +1,69 @@
+{
+  "robot_id": "RoBL-01",
+  "sequence": [
+    {
+      "id": 1,
+      "text": "When mentioning elephants,",
+      "emphasized_word": "elephants",
+      "word_importance": {
+        "when": 0.3,
+        "mentioning": 0.55,
+        "elephants": 0.7
+      },
+      "body_language": {
+        "action": "talk_motion"
+      },
+      "emotion": "neutral"
+    },
+    {
+      "id": 2,
+      "text": "the first impression is their enormous size:",
+      "emphasized_word": "enormous",
+      "word_importance": {
+        "the": 0.3,
+        "first": 0.55,
+        "impression": 0.65,
+        "is": 0.3,
+        "their": 0.4,
+        "enormous": 1.0,
+        "size": 0.8
+      },
+      "body_language": {
+        "action": "wide_motion"
+      },
+      "emotion": "neutral"
+    },
+    {
+      "id": 3,
+      "text": "they reach very high,",
+      "emphasized_word": "high",
+      "word_importance": {
+        "they": 0.3,
+        "reach": 0.8,
+        "very": 0.65,
+        "high": 1.0
+      },
+      "body_language": {
+        "action": "tall_motion"
+      },
+      "emotion": "neutral"
+    },
+    {
+      "id": 4,
+      "text": "and their bodies are extremely large.",
+      "emphasized_word": "large",
+      "word_importance": {
+        "and": 0.3,
+        "their": 0.35,
+        "bodies": 0.75,
+        "are": 0.3,
+        "extremely": 0.9,
+        "large": 1.0
+      },
+      "body_language": {
+        "action": "big_motion"
+      },
+      "emotion": "neutral"
+    }
+  ]
+}

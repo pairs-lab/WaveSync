@@ -1,0 +1,45 @@
+{
+  "robot_id": "RoBL-01",
+  "sequence": [
+    {
+      "id": 1,
+      "text": "Hello everyone,",
+      "emphasized_word": "Hello",
+      "word_importance": {
+        "hello": 1.0,
+        "everyone": 0.3
+      },
+      "body_language": {
+        "action": "hello_motion"
+      },
+      "emotion": "friendly"
+    },
+    {
+      "id": 2,
+      "text": "welcome to",
+      "emphasized_word": "welcome",
+      "word_importance": {
+        "welcome": 1.0,
+        "to": 0.3
+      },
+      "body_language": {
+        "action": "greeting_motion"
+      },
+      "emotion": "happy"
+    },
+    {
+      "id": 3,
+      "text": "our research space.",
+      "emphasized_word": "research",
+      "word_importance": {
+        "our": 1.0,
+        "research": 0.65,
+        "space": 0.55
+      },
+      "body_language": {
+        "action": "our_motion"
+      },
+      "emotion": "confident"
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# output directory
+!out/
+out/*
+!out/README.md
+
+# log directory
+log/
+wandb/
+
+# data elements (which can be produced by code)
+data/**/motions/
+
+# ignore bodymodel/smplx because it's too big
+data/bodymodel/
+
+data/SMPLX_NEUTRAL_2020.npz
+
+# ignore vposer snapshots (checkpoints) because they're too big
+data/vposer_v2_05/
+
+# ignore gt motions, because they're too big
+data/gt_motions/mr_gt.pkl
+
+data/temp/
+data/pymaf_x/
+data/demo_images/
+
+# ignore amass motions, only provide the list of motions we use
+# data/gt_motions/amass_data/*.npz
+
+# DS_Store for OS X
+.DS_Store
+
+# vscode environment settings
+.vscode/
+
+src/playground/
+
+
+video_data_real/
+
+# Ignore model training and evaluation (as requested)
+src/model/
+tools/
+src/process_data/
+docs/

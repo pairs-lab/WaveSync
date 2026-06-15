@@ -1,0 +1,48 @@
+{
+  "robot_id": "RoBL-01",
+  "sequence": [
+    {
+      "id": 1,
+      "text": "Attention!",
+      "emphasized_word": "Attention",
+      "word_importance": {
+        "attention": 1.0
+      },
+      "body_language": {
+        "action": "warning_motion"
+      },
+      "emotion": "serious"
+    },
+    {
+      "id": 2,
+      "text": "You absolutely must not step over",
+      "emphasized_word": "not",
+      "word_importance": {
+        "you": 0.35,
+        "absolutely": 1.0,
+        "must": 0.95,
+        "not": 1.0,
+        "step": 0.75,
+        "over": 0.5
+      },
+      "body_language": {
+        "action": "no_motion"
+      },
+      "emotion": "serious"
+    },
+    {
+      "id": 3,
+      "text": "this safety line.",
+      "emphasized_word": "line",
+      "word_importance": {
+        "this": 0.75,
+        "safety": 1.0,
+        "line": 0.95
+      },
+      "body_language": {
+        "action": "those_motion"
+      },
+      "emotion": "serious"
+    }
+  ]
+}

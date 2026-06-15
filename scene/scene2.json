@@ -1,0 +1,63 @@
+{
+  "robot_id": "RoBL-01",
+  "sequence": [
+    {
+      "id": 1,
+      "text": "This issue",
+      "emphasized_word": "issue",
+      "word_importance": {
+        "this": 0.85,
+        "issue": 1.0
+      },
+      "body_language": {
+        "action": "point_motion"
+      },
+      "emotion": "neutral"
+    },
+    {
+      "id": 2,
+      "text": "initially seemed very small,",
+      "emphasized_word": "small",
+      "word_importance": {
+        "initially": 0.35,
+        "seemed": 0.35,
+        "very": 0.55,
+        "small": 0.95
+      },
+      "body_language": {
+        "action": "small_motion"
+      },
+      "emotion": "neutral"
+    },
+    {
+      "id": 3,
+      "text": "but if overlooked,",
+      "emphasized_word": "overlooked",
+      "word_importance": {
+        "but": 0.65,
+        "if": 0.45,
+        "overlooked": 1.0
+      },
+      "body_language": {
+        "action": "bypass_motion"
+      },
+      "emotion": "serious"
+    },
+    {
+      "id": 4,
+      "text": "it will leave significant consequences.",
+      "emphasized_word": "significant",
+      "word_importance": {
+        "it": 0.3,
+        "will": 0.45,
+        "leave": 0.65,
+        "significant": 1.0,
+        "consequences": 0.95
+      },
+      "body_language": {
+        "action": "big_motion"
+      },
+      "emotion": "serious"
+    }
+  ]
+}

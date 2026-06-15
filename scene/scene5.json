@@ -1,0 +1,36 @@
+{
+    "robot_id": "RoBL-01",
+    "sequence": [
+        {
+            "id": 1,
+            "text": "Wait a moment...",
+            "emphasized_word": "Wait",
+            "word_importance": {
+                "wait": 1.0,
+                "a": 0.3,
+                "moment": 0.85
+            },
+            "body_language": {
+                "action": "wait_motion"
+            },
+            "emotion": "neutral"
+        },
+        {
+            "id": 2,
+            "text": "Let's see what we can do.",
+            "emphasized_word": "see",
+            "word_importance": {
+                "let's": 0.65,
+                "see": 1.0,
+                "what": 0.45,
+                "we": 0.55,
+                "can": 0.7,
+                "do": 0.85
+            },
+            "body_language": {
+                "action": "talk_motion"
+            },
+            "emotion": "confident"
+        }
+    ]
+}

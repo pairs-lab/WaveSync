@@ -1,0 +1,247 @@
+import numpy as np
+import os.path as osp
+import pickle
+import torch
+import random
+import joblib
+import sys
+from typing import Union
+from tqdm import tqdm
+from torch.utils.data import Dataset
+from pytorch3d.transforms import matrix_to_rotation_6d
+from human_body_prior.tools.rotation_tools import aa2matrot
+from human_body_prior.tools.model_loader import load_model
+from human_body_prior.models.vposer_model import VPoser
+from sklearn.metrics import mean_squared_error as mse
+
+sys.path.append("./src")
+from utils.consts import *
+
+
+def draw(probs):
+    val = random.random()
+    csum = np.cumsum(probs)
+    i = sum(1 - np.array(csum >= val, dtype=int))
+    if i == 2000:
+        return -1
+    else:
+        return i
+
+
+def load_smpl_to_6D_reps(human_pose: Union[str, np.ndarray]):
+    """
+    load SMPL parameters from a file and convert it to SMPL joint 6D representations.
+
+    Args:
+    ----------
+    human_pose (Union[str, np.ndarray]): path to load SMPL parameters or SMPL parameters
+
+    Returns:
+    ----------
+    smpl_rep (np.ndarray): SMPL joint 6D representations
+    """
+
+    # If the input is a string, load the SMPL parameters from the file.
+    # If the input is an numpy array, use it as the SMPL parameters.
+    if type(human_pose) == str:
+        human_pose_path = human_pose
+        # fmt: off
+        if human_pose_path.endswith(".pkl"):
+            human_pose: np.ndarray = joblib.load(open(human_pose_path, "rb"))["pose"][:, 3:66]
+        elif human_pose_path.endswith(".npz"):
+            human_pose: np.ndarray = np.load(human_pose_path)["pose_body"]
+        # fmt: on
+    else:
+        human_pose = human_pose[:, 3:66]
+
+    # We only get the last 18 values, which is the axis-angle of the arm joints.
+    human_arm_pose = human_pose[:, -18:]
+
+    num_poses = len(human_arm_pose)
+
+    # human pose as the axis-angle format
+    smpl_axis_angle = human_arm_pose.reshape(num_poses, -1, 3)
+    num_joints = smpl_axis_angle.shape[1]
+    smpl_axis_angle = smpl_axis_angle.reshape(num_poses * num_joints, 3)
+
+    # convert axis-angle to rotation matrix
+    smpl_rot = aa2matrot(torch.from_numpy(smpl_axis_angle))
+
+    # convert rotation matrix to 6D representation
+    smpl_rep = matrix_to_rotation_6d(smpl_rot)
+    smpl_rep = smpl_rep.reshape(num_poses, num_joints, 6).reshape(num_poses, -1)
+
+    # return the 6D representation of arm joints and the original human pose in axis-angle format
+    return smpl_rep, human_pose
+
+
+def load_and_split_train_test(
+    input_path: str,
+    reps_path: str,
+    target_path: str,
+    num_data: int,
+    split_ratio: int = 10,
+    extreme_filter_off: bool = True,
+):
+    """
+    Load SMPL parameters, robot xyzs, reps, and joint angles, and split them into train and test.
+
+    Args:
+    ----------
+    input_path (str): path to load SMPL parameters
+    reps_path (str): path to load robot xyzs and reps
+    target_path (str): path to load robot joint angles
+    num_data (int): number of total data
+    split_ratio (int): ratio of train/test split
+    extreme_filter (bool): whether to apply extreme filter to the data
+    """
+    # if use extreme filter, load VPoser model
+    if not extreme_filter_off:
+        vp, _ = load_model(
+            VPOSER_PATH,
+            model_code=VPoser,
+            remove_words_in_model_weights="vp_model.",
+            disable_grad=True,
+        )
+        vp = vp.to(DEVICE)
+
+    # set the number of test data
+    test_num = num_data // split_ratio
+
+    # initialize the data
+    all_robot_xyzs = {"train": [], "test": []}
+    all_robot_reps = {"train": [], "test": []}
+    all_robot_angles = {"train": [], "test": []}
+    all_smpl_reps = {"train": [], "test": []}
+    all_smpl_probs = {"train": [], "test": []}
+
+    print("Loading data...")
+    for idx in tqdm(range(num_data)):
+
+        # load human pose (rep: 6D representation of arm joints, pose: original human pose in axis-angle format)
+        # fmt: off
+        smpl_rep, smpl_pose = load_smpl_to_6D_reps(osp.join(input_path, f"params_{idx:04}.npz"))
+        num_poses = len(smpl_rep)
+        # fmt: on
+
+        # if extreme filter is on, calculate the reconstruction error
+        if not extreme_filter_off:
+            z: torch.Tensor = vp.encode(torch.from_numpy(smpl_pose[:]).to(DEVICE))
+            z_mean = z.mean
+
+            reconstructed_smpl: torch.Tensor = (
+                vp.decode(z_mean)["pose_body"].contiguous().view(-1, 63)
+            )
+            rec_errors = []
+
+            for i in range(num_poses):  # 2000
+                # fmt: off
+                original_pose = smpl_pose[i]                        # Tensor shaped (63,)
+                reconstructed_pose = reconstructed_smpl[i].cpu()    # Tensor shaped (63,)
+
+                rec_error = mse(original_pose, reconstructed_pose)  # float value (non-negative value)
+                rec_errors.append(rec_error)                        # List of float values
+                # fmt: on
+
+            rec_errors = np.array(rec_errors)
+            rec_errors = torch.from_numpy(rec_errors)
+
+            # Threshold value for the reconstruction error.
+            # If the reconstruction error is greater than this value, it is considered as an extreme value.
+            threshold = 0.005
+
+            probs = torch.zeros_like(rec_errors)
+            probs[rec_errors > threshold] = 0
+            probs[rec_errors <= threshold] = 1
+
+            # probs = 1 - (rec_errors / threshold)
+            # probs[probs < 0] = 0
+            # probs[probs > 0] = 1
+
+            # use the sigmoid function to make the probability values between 0 and 1
+            # p = lambda e: torch.sigmoid((0.003 - e) * 1000) + 0.04
+            # probs = p(rec_errors)
+
+            smpl_probs = probs.numpy()
+
+        # Robot data processing
+        angles_file_name = f"angles_{idx:04}.pkl"
+        xyzs_reps_file_name = f"xyzs+reps_{idx:04}.npz"
+
+        robot_angle = pickle.load(open(osp.join(target_path, angles_file_name), "rb"))
+        angle_chunk = []
+        for ra in robot_angle:
+            values = []
+            for k in sorted(list(ra.keys())):
+                values.append(ra[k])
+            angle_chunk.append(np.array(values))
+        angle_chunk = np.asarray(angle_chunk)
+
+        robot_xyzrep = np.load(osp.join(reps_path, xyzs_reps_file_name))
+        robot_xyzs: np.ndarray = robot_xyzrep["xyzs"]
+        robot_reps: np.ndarray = robot_xyzrep["reps"]
+
+        robot_xyzs = robot_xyzs.reshape(num_poses, -1)
+        robot_reps = robot_reps.reshape(num_poses, -1)
+
+        # Split the data into train and test
+        if idx < test_num:
+            target = "test"
+        else:
+            target = "train"
+
+        all_robot_xyzs[target].append(robot_xyzs)
+        all_robot_reps[target].append(robot_reps)
+        all_robot_angles[target].append(angle_chunk)
+        all_smpl_reps[target].append(smpl_rep)
+        if not extreme_filter_off:
+            all_smpl_probs[target].append(smpl_probs)
+
+    for target in ["test", "train"]:
+        all_robot_xyzs[target] = np.concatenate(all_robot_xyzs[target], axis=0)
+        all_robot_reps[target] = np.concatenate(all_robot_reps[target], axis=0)
+        all_robot_angles[target] = np.concatenate(all_robot_angles[target], axis=0)
+        all_smpl_reps[target] = np.concatenate(all_smpl_reps[target], axis=0)
+        if not extreme_filter_off:
+            all_smpl_probs[target] = np.concatenate(all_smpl_probs[target], axis=0)
+
+    return (
+        all_robot_xyzs,
+        all_robot_reps,
+        all_robot_angles,
+        all_smpl_reps,
+        all_smpl_probs,
+    )
+
+
+class H2RMotionData(Dataset):
+    def __init__(
+        self,
+        robot_xyz,
+        robot_rep,
+        robot_angle,
+        smpl_rep,
+        smpl_prob,
+        extreme_filter_off=True,
+    ):
+        self.robot_xyz = robot_xyz
+        self.robot_rep = robot_rep
+        self.robot_angle = robot_angle
+        self.smpl_rep = smpl_rep
+        self.smpl_prob = smpl_prob
+        self.extreme_filter_off = extreme_filter_off
+
+    def __len__(self):
+        return len(self.smpl_rep)
+
+    def __getitem__(self, idx):
+        sample = dict()
+
+        sample["robot_xyz"] = self.robot_xyz[idx]
+        sample["robot_rep"] = self.robot_rep[idx]
+        sample["robot_angle"] = self.robot_angle[idx]
+        sample["smpl_rep"] = self.smpl_rep[idx]
+        if not self.extreme_filter_off:
+            sample["smpl_prob"] = self.smpl_prob[idx]
+
+        return sample
