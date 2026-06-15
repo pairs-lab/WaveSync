@@ -1,12 +1,12 @@
 # WaveSync
 
-## ⚙️ Installation
+## Installation
 Install the Python dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-## 📂 Dataset & Model Setup
+## Dataset & Model Setup
 
 Before running the simulation, you need to set up the required data and model weights.
 
@@ -15,7 +15,7 @@ Before running the simulation, you need to set up the required data and model we
 
 ![Directory Structure](docs/structure.png)
 
-## 🛠️ Usage
+## Usage
 
 The core simulation is executed via `execute.py`. You can trigger predefined scenes from the `scene/` directory.
 
