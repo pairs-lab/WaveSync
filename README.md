@@ -1,8 +1,19 @@
 # WaveSync
-
-<p align="center">
-  <video src="https://github.com/user-attachments/assets/10836066-5fe5-47af-9907-98259508199c" width="100%" autoplay loop muted playsinline></video>
+<div align="center">
+<h1>🌊 WaveSync</h1>
+<p><strong>Constrained Wavefront Optimization for Synchronized Co-Speech Gestures in Humanoid Robots</strong></p>
+<p>
+  <a href="https://arxiv.org/abs/2606._">
+    <img src="https://img.shields.io/badge/arXiv-2606.___-b31b1b?style=flat-square&logo=arxiv" alt="arXiv"/>
+  </a>
+  <img src="https://img.shields.io/badge/Python-3.8%2B-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"/>
+  <img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="License"/>
 </p>
+
+<p>
+  <video src="https://github.com/user-attachments/assets/10836066-5fe5-47af-9907-98259508199c" width="90%" autoplay loop muted playsinline></video>
+</p>
+
 
 ## Installation
 Install the Python dependencies:
