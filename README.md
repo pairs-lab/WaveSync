@@ -5,10 +5,13 @@
 <a href="https://arxiv.org/abs/2606._">
   <img src="https://img.shields.io/badge/arXiv-2606.___-b31b1b?style=flat-square&logo=arxiv" alt="arXiv"/>
 </a>
-<img src="https://img.shields.io/badge/Python-3.8%2B-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"/>
+<img src="https://img.shi
+
+
+elds.io/badge/Python-3.8%2B-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"/>
 <img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="License"/>
 
-<video src="https://github.com/user-attachments/assets/10836066-5fe5-47af-9907-98259508199c" width="90%" autoplay loop muted playsinline></video>
+<video src="https://github.com/user-attachments/assets/4f2ccf53-9ae7-4056-a6e0-af66e7cc60e6" width="90%" autoplay loop muted playsinline></video>
 
 ---
 
