@@ -1,6 +1,8 @@
 # WaveSync
 
-[![WaveSync Demo Video](docs/thumbnail.png)](docs/demo.mp4)
+<p align="center">
+  <video src="https://github.com/user-attachments/assets/10836066-5fe5-47af-9907-98259508199c" width="100%" autoplay loop muted playsinline></video>
+</p>
 
 ## Installation
 Install the Python dependencies:
