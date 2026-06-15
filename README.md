@@ -1,5 +1,9 @@
 # WaveSync
 
+<p align="center">
+  <video src="docs/demo.mp4" width="100%" controls></video>
+</p>
+
 ## Installation
 Install the Python dependencies:
 ```bash
