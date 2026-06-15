@@ -27,6 +27,13 @@ python execute.py -s scene3.json
 python execute.py -s scene4.json
 python execute.py -s scene5.json
 ```
-##Citation
-```
+## Citation
+
+```bibtex
+@article{viet2026wavesync,
+  title={ WaveSync: Constrained Wavefront Optimization for Synchronized Co-Speech  Gestures in Humanoid Robots},
+  author={Thang Tran Viet, Thanh Nguyen Canh, Gia Huy Uong, Phuc Van Dinh, Tan Viet Tuyen Nguyen, Xiem HoangVan, and Nak Young Chong},
+  journal={arXiv preprint arXiv:2606._},
+  year={2026}
+}
 ```
