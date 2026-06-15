@@ -1,6 +1,6 @@
 # WaveSync
 
-![WaveSync Demo](docs/demo.mp4)
+[![WaveSync Demo Video](docs/thumbnail.png)](docs/demo.mp4)
 
 ## Installation
 Install the Python dependencies:
