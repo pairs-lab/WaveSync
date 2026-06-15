@@ -27,7 +27,7 @@ data/gt_motions/mr_gt.pkl
 data/temp/
 data/pymaf_x/
 data/demo_images/
-
+data/nao/
 # ignore amass motions, only provide the list of motions we use
 # data/gt_motions/amass_data/*.npz
 
@@ -46,4 +46,3 @@ video_data_real/
 src/model/
 tools/
 src/process_data/
-docs/
