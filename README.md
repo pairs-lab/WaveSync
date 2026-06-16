@@ -3,7 +3,7 @@
 **Constrained Wavefront Optimization for Synchronized Co-Speech Gestures in Humanoid Robots**
 
 <a href="https://arxiv.org/abs/2606._">
-  <img src="https://img.shields.io/badge/arXiv-2606.___-b31b1b?style=flat-square&logo=arxiv" alt="arXiv"/>
+  <img src="https://img.shields.io/badge/arXiv-2606.16600-b31b1b?style=flat-square&logo=arxiv" alt="arXiv"/>
 </a>
 <img src="https://img.shi
 
@@ -96,7 +96,7 @@ If you find WaveSync useful in your research, please cite our paper:
 @article{viet2026wavesync,
   title     = {WaveSync: Constrained Wavefront Optimization for Synchronized Co-Speech Gestures in Humanoid Robots},
   author    = {Thang Tran Viet and Thanh Nguyen Canh and Gia Huy Uong and Phuc Van Dinh and Tan Viet Tuyen Nguyen and Xiem HoangVan and Nak Young Chong},
-  journal   = {arXiv preprint arXiv:2606.\_},
+  journal   = {arXiv preprint arXiv:2606.16600},
   year      = {2026}
 }
 ```
